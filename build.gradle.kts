@@ -5,13 +5,14 @@ plugins {
 }
 
 group = "com.github.rschmitt"
-version = "1.7.0"
+version = "1.7.1"
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
@@ -23,6 +24,7 @@ dependencies {
 
     testCompileOnly("org.junit.jupiter:junit-jupiter-api:5.+")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.+")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("collection-check:collection-check:0.1.6")
 }
 
@@ -105,4 +107,7 @@ signing {
 
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
+    options.release.set(8)
 }
+
+defaultTasks("build")
