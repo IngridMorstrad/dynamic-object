@@ -14,7 +14,6 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -83,8 +82,7 @@ class Reflection {
     }
 
     private static boolean hasAnnotation(Method method, Class<? extends Annotation> ann) {
-        List<Annotation> annotations = Arrays.asList(method.getAnnotations());
-        for (Annotation annotation : annotations)
+        for (Annotation annotation : method.getAnnotations())
             if (annotation.annotationType().equals(ann))
                 return true;
         return false;
