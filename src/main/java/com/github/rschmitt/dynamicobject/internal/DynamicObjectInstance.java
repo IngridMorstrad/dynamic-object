@@ -18,6 +18,11 @@ import static java.lang.String.format;
 public abstract class DynamicObjectInstance<D extends DynamicObject<D>> extends AFn implements Map, IPersistentMap, IObj, MapEquivalence, IHashEq, DynamicObjectPrintHook, CustomValidationHook<D> {
     private static final Object Default = new Object();
     private static final Object Null = new Object();
+    private static final AFn IGNORE_NULLS = new AFn() {
+        public Object invoke(Object arg1, Object arg2) {
+            return (arg2 == null) ? arg1 : arg2;
+        }
+    };
 
     private final Map map;
     private final Class<D> type;
@@ -68,12 +73,7 @@ public abstract class DynamicObjectInstance<D extends DynamicObject<D>> extends 
     }
 
     public D merge(D other) {
-        AFn ignoreNulls = new AFn() {
-            public Object invoke(Object arg1, Object arg2) {
-                return (arg2 == null) ? arg1 : arg2;
-            }
-        };
-        Map mergedMap = (Map) ClojureStuff.MergeWith.invoke(ignoreNulls, map, other.getMap());
+        Map mergedMap = (Map) ClojureStuff.MergeWith.invoke(IGNORE_NULLS, map, other.getMap());
         return DynamicObject.wrap(mergedMap, type);
     }
 
