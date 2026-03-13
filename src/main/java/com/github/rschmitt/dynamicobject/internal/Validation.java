@@ -2,7 +2,6 @@ package com.github.rschmitt.dynamicobject.internal;
 
 import com.github.rschmitt.dynamicobject.DynamicObject;
 
-import javax.annotation.CheckReturnValue;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -260,18 +259,6 @@ class Validation {
 
         private boolean isSupportedGenericType(Type genericType) {
             return (genericType instanceof ParameterizedType) || (genericType instanceof Class);
-        }
-
-        @CheckReturnValue
-        private Runnable checkTypeVariable(Type typeArg) {
-            if (typeArg instanceof WildcardType)
-                return () -> { throw new UnsupportedOperationException("Wildcard return types are not supported"); };
-            else if (typeArg instanceof ParameterizedType)
-                return () -> {};
-            else if (typeArg instanceof Class)
-                return () -> {};
-            else
-                throw new UnsupportedOperationException("Unknown generic type argument type: " + typeArg.getClass().getCanonicalName());
         }
 
         // Returns an void(Object) MethodHandle that will throw if its argument cannot be cast to the specified type,
